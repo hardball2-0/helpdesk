@@ -1,0 +1,14 @@
+Install-Module MSOnline
+
+Connect-MsolService
+
+Get-MsolUser -All | Select DisplayName,UserPrincipalName,@{N="MFAStatus"; E={ if( $_.StrongAuthenticationMethods.IsDefault -eq $true) {($_.StrongAuthenticationMethods | Where IsDefault -eq $True).MethodType} else { "Disabled"}}} | Export-CSV -Path "C:\mfa\export_comptes_mfa.csv"-Delimiter ";" -encoding utf8
+
+
+#Methode par defaut : 
+#OneWaySMS -> code unique envoyé par SMS
+#PhoneAppNotification -> application comme Microsoft Authenticator
+#PhoneAPPOTP -> application de code OTP
+#TwoWayVoiceMobile -> appel au numero definie
+
+#Se connecter avec un compte ayant les droits de vérification
